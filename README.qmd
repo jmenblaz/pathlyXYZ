@@ -1,0 +1,15 @@
+---
+title: "readme_pathlyXYZ"
+author: "jmenblaz"
+format: html
+editor: visual
+---
+
+## pathlyXYZ
+
+***Keywords:** Movement-ecologty · Biologging · 3D-Movement · Animal-tracking · Trajectory simulation · Vertical dimension*
+
+**pathlyXYZ** is an open-access R package to simulate 3D movement paths (X, Y, Z) from empirical biologging trajectories.
+
+```{}
+```
