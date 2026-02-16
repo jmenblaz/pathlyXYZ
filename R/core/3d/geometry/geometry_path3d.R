@@ -62,7 +62,7 @@
 #' @export
 
 
-length_3dpath <- function(trj3d, startIndex = 1, endIndex = nrow(trj3d)) {
+length_path3d <- function(trj3d, startIndex = 1, endIndex = nrow(trj3d)) {
   
   stopifnot(inherits(trj3d, "Trajectory3D"))
   

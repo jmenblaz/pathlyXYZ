@@ -3,7 +3,7 @@
 
 # simple 3D plots using rgl function
 
-plot_3dpath <- function(x, y, z, add = FALSE, color = NULL) {
+plot_path3d <- function(x, y, z, add = FALSE, color = NULL) {
   
   # check
   if (length(x) != length(y) || length(x) != length(z)) {

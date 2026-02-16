@@ -1,0 +1,61 @@
+---
+title: "sim_readme"
+format: html
+editor: visual
+---
+
+## Quarto
+
+“pathlyXYZ implements three classes of 3D movement simulations, spanning from purely geometric null models to fully conditional autocorrelated surrogates.”
+
+**3D Correlated Random Walk**
+
+Dt​=Dt−1​A+εt
+
+introduce **persistencia direccional real**\
+
+✔ permite **correlación cruzada entre ejes (x–y–z)**\
+
+✔ evita la bola
+
+✔ es defendible en reviewer​
+
+## CRW **sin drift** (drift = FALSE)
+
+-   Solo considera **persistencia direccional**
+
+    La trayectoria tiene **autocorrelación en la dirección**: cada paso “apunta más o menos hacia la dirección anterior”.
+
+    Pero el **promedio de desplazamiento es cero**:
+
+    E[Dt]=0\mathbb{E}[D_t] = 0E\[Dt​\]=0
+
+    Resultado: la trayectoria se mueve como una “nube elongada” alrededor del punto inicial, **sin tendencia neta**.
+
+    Ideal como **null model** para probar hipótesis de selección de hábitat, tortuosidad, etc.
+
+🔹 Ejemplo visual:
+
+-   El animal se mueve en zigzag, pero no va a ningún sitio particular, aunque sí mantiene persistencia.
+
+##  CRW **con drift** (drift = TRUE)
+
+-   Incluye la **media de los desplazamientos observados**:
+
+    E[Dt]=μ≠0\mathbb{E}[D_t] = \mu \neq 0E\[Dt​\]=μ=0
+
+    Cada paso simulado tiene la **dirección de persistencia + un vector de deriva**.
+
+    Resultado: la trayectoria tiende a **“migrar” en la dirección observada**, manteniendo el comportamiento de zigzag/persistencia.
+
+    Útil si quieres que las simulaciones **respeten la tendencia neta del animal**, por ejemplo:
+
+    -   migraciones
+
+        desplazamientos a áreas de alimentación
+
+        trayectorias de regreso a colonia
+
+🔹 Ejemplo visual:
+
+-   La trayectoria zigzaguea, pero **su centro de masa se mueve consistentemente hacia la meta**.
