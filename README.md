@@ -1,7 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# **pathlyXYZ**
+\# **pathlyXYZ**
 
 <div style="float:right; margin-left: 20px;">
 
@@ -13,8 +12,6 @@
 <!-- badges: end -->
 
 The goal of pathlyXYZ is to …
-
-------------------------------------------------------------------------
 
 ## Installation
 
