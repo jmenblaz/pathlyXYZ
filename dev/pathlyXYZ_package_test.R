@@ -1,8 +1,6 @@
 
 
 
-
-
 # load package
 # pathlyXYZ
 devtools::load_all()
@@ -34,10 +32,25 @@ plot_simpath3d(sim_tracks, original = path3D)
 
 
 
+# check function
+
+
+df <- data.frame(
+  organismID = 1:5,
+  latitude   = runif(5, -10, 10),
+  longitude  = runif(5, -10, 10),
+  altitude   = runif(5, 0, 100),
+  myCustomVar = 1:5
+)
+
+check_sequeira_names(df)
 
 
 
 
+
+# geometries
+straight_dist_path3d(path3D)
 
 
 
