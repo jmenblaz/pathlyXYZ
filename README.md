@@ -1,19 +1,18 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-\# **pathlyXYZ**
 
-<div style="float:right; margin-left: 20px;">
-
-<a href='https://ianjonsen.github.io/aniMotum/index.html'><img src='man/figures/pathlyXYZ_logo_bg_white.svg'              align="right" height="200" /></a>
-
-</div>
+# **pathlyXYZ** <a href='https://ianjonsen.github.io/aniMotum/index.html'><img src='man/figures/pathlyXYZ_logo_bg_white.svg' align="right" height="200" /></a>
 
 <!-- badges: start -->
 <!-- badges: end -->
 
+## Overview
+
 The goal of pathlyXYZ is to …
 
-## Installation
+------------------------------------------------------------------------
+
+## Getting started
 
 You can install the development version of pathlyXYZ from
 [GitHub](https://github.com/) with:
