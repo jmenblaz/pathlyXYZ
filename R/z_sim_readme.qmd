@@ -28,7 +28,7 @@ introduce **persistencia direccional real**\
 
     Pero el **promedio de desplazamiento es cero**:
 
-    E[Dt]=0\mathbb{E}[D_t] = 0E\[Dt​\]=0
+    E\[Dt\]=0\mathbb{E}\[D_t\] = 0E\[Dt​\]=0
 
     Resultado: la trayectoria se mueve como una “nube elongada” alrededor del punto inicial, **sin tendencia neta**.
 
@@ -38,11 +38,11 @@ introduce **persistencia direccional real**\
 
 -   El animal se mueve en zigzag, pero no va a ningún sitio particular, aunque sí mantiene persistencia.
 
-##  CRW **con drift** (drift = TRUE)
+## CRW **con drift** (drift = TRUE)
 
 -   Incluye la **media de los desplazamientos observados**:
 
-    E[Dt]=μ≠0\mathbb{E}[D_t] = \mu \neq 0E\[Dt​\]=μ=0
+    E\[Dt\]=μ≠0\mathbb{E}\[D_t\] = \mu \neq 0E\[Dt​\]=μ=0
 
     Cada paso simulado tiene la **dirección de persistencia + un vector de deriva**.
 

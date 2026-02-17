@@ -1,0 +1,14 @@
+citHeader("To cite pathlyXYZ in publications, please, use these references:")
+
+citEntry(entry = "article",
+         title        = "pathlyXYZ · An R Package for simulate, explore and visualize multidimensional animal movement data",
+         author       = personList(as.person("Javier Menéndez-Blázquez")),
+         journal      = "Not published",
+         year         = "202X",
+         doi          = "10.xxxx/xxxx-xxxX.xxxxx"",
+
+         textVersion  =
+           paste("Javier Menéndez-Blázquez (202X) ",
+                 "pathlyXYZ · An R Package for simulate, explore and visualize multidimensional animal movement data.",
+                 " journal DOI: 10.xxxx/xxxx-xxxX.xxxxx")
+)
