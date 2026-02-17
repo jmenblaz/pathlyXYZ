@@ -1,16 +1,17 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# pathlyXYZ <a href='https://ianjonsen.github.io/aniMotum/index.html'><img src='man/figures/pathlyXYZ_logo_bg_white.svg' align="right" height="200" /></a>
+# pathlyXYZ <a href='https://ianjonsen.github.io/aniMotum/index.html'><img src="man/figures/pathlyXYZ_logo_bg_white.svg" align="right" height="200"/></a>
 
 <!-- badges: start -->
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+
 <!-- badges: end -->
 
 `pathlyXYZ` is R package to simulate movement paths in three axis of the
-landdcape (X, Y, Z) for empirical bio-logging trajectories. Its main and
+landscape (X, Y, Z) for empirical bio-logging trajectories. Its main and
 novel feature is the ability to simulate fully 3D paths, while
 maintaining flexibility to implement, unify, or extend other types of
 path simulations such as 2-2.5D in future versions.
@@ -28,8 +29,8 @@ The package has multiple cutting-edge use cases, such as, 1)
 **Generating pseudo-absences or background points for Species
 Distribution Models (SDMs)**
 
-**Keywords:** Movement-ecologty · Biologging · 3D-Movement ·
-Animal-tracking · Trajectory simulation · Vertical dimension\*
+**Keywords:** *Movement-ecologty · Bio-logging · 3D-Movement ·
+Animal-tracking · Trajectory simulation · Vertical dimension*
 
 ------------------------------------------------------------------------
 

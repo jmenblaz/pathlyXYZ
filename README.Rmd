@@ -13,23 +13,24 @@ knitr::opts_chunk$set(
   message = TRUE
 )
 ```
-# pathlyXYZ <a href='https://ianjonsen.github.io/aniMotum/index.html'><img src='man/figures/pathlyXYZ_logo_bg_white.svg' align="right" height="200" /></a>
+
+# pathlyXYZ <a href='https://ianjonsen.github.io/aniMotum/index.html'><img src="man/figures/pathlyXYZ_logo_bg_white.svg" align="right" height="200"/></a>
 
 <!-- badges: start -->
+
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+
 <!-- badges: end -->
 
-`pathlyXYZ` is R package to simulate movement paths in three axis of the landdcape (X, Y, Z) for empirical bio-logging trajectories. Its main and novel feature is the ability to simulate fully 3D paths, while maintaining flexibility to implement, unify, or extend other types of path simulations such as 2-2.5D in future versions.
+`pathlyXYZ` is R package to simulate movement paths in three axis of the landscape (X, Y, Z) for empirical bio-logging trajectories. Its main and novel feature is the ability to simulate fully 3D paths, while maintaining flexibility to implement, unify, or extend other types of path simulations such as 2-2.5D in future versions.
 
 Animal movement occurs naturally in three dimensions, not just in a 2D plane (whether in marine, terrestrial, or aerial environments). **pathlyXYZ** is an open-access R package for simulating movement paths in three dimensions (X, Y, Z) from empirical bio-logging trajectories. Its main novelty is the ability to generate fully 3D trajectories while maintaining flexibility to implement, unify, or extend other path simulation approaches, including 2D and 2.5D simulations in coming versions.
 
 The package has multiple cutting-edge use cases, such as, 1) **Generating pseudo-absences or background points for Species Distribution Models (SDMs)**
 
+**Keywords:** *Movement-ecologty · Bio-logging · 3D-Movement · Animal-tracking · Trajectory simulation · Vertical dimension*
 
-**Keywords:** Movement-ecologty · Biologging · 3D-Movement · Animal-tracking · Trajectory simulation · Vertical dimension*
-
-
----
+------------------------------------------------------------------------
 
 ## Installation
 
