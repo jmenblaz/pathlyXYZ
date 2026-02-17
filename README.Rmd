@@ -9,13 +9,16 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  message = TRUE
 )
 ```
+# pathlyXYZ <a href='https://ianjonsen.github.io/aniMotum/index.html'><img src='man/figures/pathlyXYZ_logo_bg_white.svg' align="right" height="140" /></a>
 
-# pathlyXYZ
+
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 The goal of pathlyXYZ is to ...
@@ -47,9 +50,5 @@ summary(cars)
 You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
 
 You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
 
 In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
