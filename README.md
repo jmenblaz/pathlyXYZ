@@ -8,13 +8,10 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
-
 [![Status:
 development](https://img.shields.io/badge/status-development-blue.svg)](#)
-
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-
 [![Last
 commit](https://img.shields.io/github/last-commit/jmenblaz/pathlyXYZ)](https://github.com/jmenblaz/pathlyXYZ/commits/main)
 
