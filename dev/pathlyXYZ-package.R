@@ -17,5 +17,5 @@
 #' @import trajr
 #' @import rgl
 #' @import paletteer
-#'
+#' @import layer
 NULL

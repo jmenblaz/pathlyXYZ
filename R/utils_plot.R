@@ -1,6 +1,15 @@
 
+# pathlyXYZ - utils_plot.R
 
-# get paletter colors
+
+
+
+# helpers
+# - .get paletter colors
+# - .plot_titedmaps_pathlyXYZ
+
+# some example of ramp colors in:
+# https://r-charts.com/color-palettes/
 
 .get_paletteer_colors <- function(palette, n) {
 
@@ -8,12 +17,10 @@
     stop("Package 'paletteer' is required for palette-based coloring")
   }
 
-  # Si el usuario pasa solo "viridis", asumimos grDevices
   if (!grepl("::", palette)) {
     palette <- paste0("grDevices::", stringr::str_to_title(palette))
   }
 
   paletteer::paletteer_c(palette, n)
 }
-
 
