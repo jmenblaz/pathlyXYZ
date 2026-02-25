@@ -16,8 +16,8 @@ commit](https://img.shields.io/github/last-commit/jmenblaz/pathlyXYZ)](https://g
 
 <!-- badges: end -->
 
-**`pathlyXYZ`** is an open-access R package for simulating, explore and
-visualize animal movement paths in three dimensions (X, Y, Z) from
+**`pathlyXYZ`** is an open-access R package for simulating, exploring
+and visualizing animal movement paths in three dimensions (X, Y, Z) from
 empirical bio-logging data. Unlike most existing tools that operate in
 two-dimensional space, `pathlyXYZ` enables the generation of fully 3D
 trajectories, explicitly accounting for vertical movement alongside

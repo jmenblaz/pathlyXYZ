@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-**`pathlyXYZ`** is an open-access R package for simulating, explore and visualize animal movement paths in three dimensions (X, Y, Z) from empirical bio-logging data. Unlike most existing tools that operate in two-dimensional space, `pathlyXYZ` enables the generation of fully 3D trajectories, explicitly accounting for vertical movement alongside horizontal displacement.
+**`pathlyXYZ`** is an open-access R package for simulating, exploring and visualizing animal movement paths in three dimensions (X, Y, Z) from empirical bio-logging data. Unlike most existing tools that operate in two-dimensional space, `pathlyXYZ` enables the generation of fully 3D trajectories, explicitly accounting for vertical movement alongside horizontal displacement.
 
 The package is being designed (experimental stage) to be flexible and extensible, allowing future integration of alternative movement representations such as 2.5D simulations within a unified framework.
 
