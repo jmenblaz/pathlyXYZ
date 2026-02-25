@@ -1,0 +1,7 @@
+# Development Folder
+
+Temporary scripts and work-in-progress functions
+
+Contents here are staged for final implementation into the
+`/R` directory once testing is complete and stability is ensured
+for the official package version.
