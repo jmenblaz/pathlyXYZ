@@ -75,7 +75,8 @@ include worked examples illustrating typical use cases, such as:
 
 - Simulation of fully 3D movement paths from observed tracking data
   (marine, aerial and terrestrial environment) by different modelling
-  methods
+  methods \[e.g., Correlated Random Walks (CRW) or Step Selection
+  Functions (SSF)\]
 - Visualize and ploting shor-cuts and tools in order to facility the use
   of vertical dimension in the use of bio-logging data
 
