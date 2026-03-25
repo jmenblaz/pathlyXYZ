@@ -41,9 +41,9 @@
 #' @param start Starting coordinates (x, y[, z])
 #' @param z_bounds for z axy limits -> c(-Inf, Inf),
 #' @param central_place, for central place foraging paths (Logic TRUE/FALSE
-#' @param central_place_strength, if @central_place is TRUE, modify the atracction force
+#' @param central_place_strength, if @central_place is TRUE, modify the attraction force
 #'
-#' @param ... Additional args for trajr functions
+#' @param ... Additional args for trajr R package functions
 #'
 #' @return Trajectory object (2D or 3D) from trajr
 #' @export
