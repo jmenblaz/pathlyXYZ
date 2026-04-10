@@ -200,8 +200,9 @@ plot_rstack3d <- function(rstack,
   tilt_list <- list()
 
   tilt_list <- list()
-  for (i in seq_along(layers_to_process)) {
-    lyr <- layers_to_process[[i]]
+
+  for (i in seq_along(layers)) {
+    lyr <- layers[[i]]
 
     # Calculate vertical shift
     direction <- if (top_bottom == "up") -1 else 1
