@@ -55,19 +55,56 @@
 #' @examples
 #' \donttest{
 #' library(terra)
-#' r <- rast(system.file("ex/logo.tif", package="terra"))
-#' r <- rep(r, 3)
-#' # Plot the first two layers with a tilt and vertical shift
-#' plot_rstack3d(r,
-#'               n_layers = 2,
-#'               y_tilt = 1.5,
-#'               y_layer_shift = 2.5,
-#'               angle_rotate = pi/20,
-#'               cols = "cividis",
-#'               top_bottom = 'up')
-#' }
+#' library(pathlyXYZ)
+
+#' # Examples of use ----------------------------------------------------------
+#' # 1 - Plotting decrease continuos variable ---------------------------------
+#' #     using custom color ramp and z limits scaled by global values into stack
+#'
+#' r <- terra::rast(volcano)
+#' rstack <- c(rstack, r * 0.85, r * 0.7) # 3 layers as continuos raster
+#' names(rstack) <- c("orginal", "lower", "lowest")
+#'
+#' colramp  <- terrain.colors(100)  # custom color ramp
+#'
+#' plot stack layers using
+#' plot_rstack3d(s,
+#'     colramp = colramp,
+#'     z_limits = "auto",  # min and max global
+#'     y_tilt = 0.7,
+#'     y_layer_shift = 65,
+#'     alpha = 1)
+#'
+
+#' # 2 - Plotting standardized probabilities (0 to 1) --------------------------
+#' #     Useful for Species Distribution Models or Habitat Suitability in 3D
+#'
+#' r <- terra::rast(volcano)
+#'
+#' # Nomalize 0 - 1 values of volvano dataset
+#' r_norm <- (r - terra::minmax(r)[1]) / (terra::minmax(r)[2] - terra::minmax(r)[1])
+#' rstack_sdm <- c(r_norm, r_norm * 0.6, r_norm * 0.3)
+#' names(rstack_sdm) <- c("High_Suitability", "Medium", "Low")
+
+#' # standarized or classic color palette
+#' colramp <- viridis::magma(100)
+
+#' plot_rstack3d(rstack_sdm,
+#'               colramp = colramp,
+#'               z_limits = c(0, 1), # Forzamos la escala de 0% a 100%
+#'               y_tilt = 0.7,
+#'               y_layer_shift = 65,
+#'               alpha = 1)
+#'
+#'
+#'
 #'
 #' @export
+
+
+
+
+
 
 
 
@@ -85,33 +122,33 @@
 #'
 #' @keywords internal
 
-plot_tiltedmaps_helper <- function(map_list, colramp, limits = "auto", alpha = 1) {
 
+plot_tiltedmaps_helper <- function(map_list, colramp, limits = "auto", alpha = 1) {
   if (length(alpha) == 1) alpha <- rep(alpha, length(map_list))
 
-  # Lógica de límites
-  if (is.character(limits) && limits == "auto") {
-    # Extraer todos los valores de todas las capas para sacar el rango global
-    # extract all vlaues of stack layer to obtain range
-    # minmax of all stack
+  # Lógica de límites globales si es "auto"
+  if (identical(limits, "auto")) {
     all_values <- unlist(lapply(map_list, function(x) x$value))
     render_limits <- range(all_values, na.rm = TRUE)
   } else {
-    render_limits <- limits # Puede ser c(min, max) o NULL
+    render_limits <- limits
   }
 
   p <- ggplot2::ggplot()
 
   for (i in seq_along(map_list)) {
-
-    # Si limits es NULL, forzamos escalas independientes usando new_scale
-    #  If limit null, use independt scale using new scale (same logic than 'layer')
-
-    if (is.null(limits) || i > 1) {
+    # Siempre aplicamos new_scale para permitir paletas independientes
+    if (i > 1) {
       p <- p +
         ggnewscale::new_scale_fill() +
         ggnewscale::new_scale_color()
     }
+
+    # Seleccionar la paleta para esta iteración
+    # Si colramp es una lista, toma el elemento i. Si es un vector, lo usa siempre.
+    current_cols <- if (is.list(colramp)) colramp[[i]] else colramp
+
+    # Si limits es NULL, cada capa usará su propio rango local automáticamente
 
     p <- p +
       ggplot2::geom_sf(
@@ -119,25 +156,19 @@ plot_tiltedmaps_helper <- function(map_list, colramp, limits = "auto", alpha = 1
         ggplot2::aes(fill = .data[["value"]], color = .data[["value"]]),
         alpha = alpha[i],
         size = 0.01
+      ) +
+      ggplot2::scale_fill_gradientn(
+        colors = current_cols,
+        limits = render_limits,
+        guide  = "none",
+        oob    = scales::squish
+      ) +
+      ggplot2::scale_color_gradientn(
+        colors = current_cols,
+        limits = render_limits,
+        guide  = "none",
+        oob    = scales::squish
       )
-
-    # Aplicar color solo si se definió colramp
-    #  apply custom ramp color
-    if (!is.null(colramp)) {
-      p <- p +
-        ggplot2::scale_fill_gradientn(
-          colors = colramp,
-          limits = render_limits, # Si es NULL, ggplot lo calcula por capa
-          guide  = "none",
-          oob    = scales::squish
-        ) +
-        ggplot2::scale_color_gradientn(
-          colors = colramp,
-          limits = render_limits,
-          guide  = "none",
-          oob    = scales::squish
-        )
-    }
   }
   return(p + ggplot2::theme_void())
 }
