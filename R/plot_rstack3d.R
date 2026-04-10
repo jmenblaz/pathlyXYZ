@@ -19,6 +19,9 @@
 #''pathlyXYZ' added features:
 #'
 #'
+#'
+#'
+#'
 #' @param rstack RasterStack (from `raster`) or SpatRaster (from `terra`) object containing the layers to plot.
 #' @param n_layers Integer specifying the number of layers from the stack to plot.
 #'        By default, all layers are plotted.
@@ -28,7 +31,15 @@
 #' @param y_layer_shift Numeric controlling the vertical spacing between layers. Default is 10.
 #' @param angle_rotate Numeric specifying the rotation angle (radians) for tilting the layers. Default is pi/20.
 #' @param cols Optional palette of colors to apply to the layers. Supports `viridis`, or `scico` (see `layer` docs)
-#' @param colramp Optional custom color ramp (vector of colors) for plotting the stack (*under development*)
+#' @param colramp Optional custom color ramp for plotting. Accepts:
+#'          - A **vector of colors** (e.g., `terrain.colors(100)`): This ramp will be
+#'            applied to all layers in the stack; or your own color ramp.
+#'          - A **list of color vectors** (e.g., `list(viridis(100), magma(100))`):
+#'            Allows assigning a different palette to each layer. This is ideal
+#'            for visualizing heterogeneous variables (e.g., Temperature and Salinity)
+#'            within the same 2.5D plot.
+#'          - If `NULL` (default), the function falls back to the `cols` parameter
+#'            or the standard 'viridis' palette.
 #' @param z_limits Controls how color scales are calculated across the stack:
 #'         - `"auto"` (Default): Calculates a global min/max across all layers. Ideal for comparing
 #'           intensities (e.g., SDMs, UDs) across different depths/altitudes.
@@ -52,6 +63,8 @@
 #' - The function is a wrapper that simplifies creating 2.5D visualizations without manual
 #'   processing of individual layers.
 #'
+#'
+#'
 #' @examples
 #' \donttest{
 #' library(terra)
@@ -62,7 +75,7 @@
 #' #     using custom color ramp and z limits scaled by global values into stack
 #'
 #' r <- terra::rast(volcano)
-#' rstack <- c(rstack, r * 0.85, r * 0.7) # 3 layers as continuos raster
+#' rstack <- c(r, r * 0.85, r * 0.7) # 3 layers as continuos raster
 #' names(rstack) <- c("orginal", "lower", "lowest")
 #'
 #' colramp  <- terrain.colors(100)  # custom color ramp
@@ -75,7 +88,6 @@
 #'     y_layer_shift = 65,
 #'     alpha = 1)
 #'
-
 #' # 2 - Plotting standardized probabilities (0 to 1) --------------------------
 #' #     Useful for Species Distribution Models or Habitat Suitability in 3D
 #'
@@ -96,13 +108,32 @@
 #'               y_layer_shift = 65,
 #'               alpha = 1)
 #'
+#' # 3 - Mixed Scales and Custom Palettes --------------------------------------
+#' # Example: Temperature (Viridis) and Salinity (Magma/Custom)
+
+#' r <- terra::rast(volcano)
+#' s_mixed <- c(r, r)
+#' names(s_mixed) <- c("Temperature", "Salinity")
 #'
+#' # Definimos una lista de paletas (una por cada capa)
+#' # Define a list of palettes for each layer (take into account layer position)
+#'  palettes_list <- list(
+#'   viridis::viridis(100),   # Paleta para Temperatura
+#'   viridis::magma(100)     # Paleta para Salinidad (o cualquier vector de colores)
+#' )
 #'
+#' # Al usar z_limits = NULL, cada una se escala a su propio rango
+#' # Use z-limits = NUll, to add different palette color in each layer (and its
+#' # range values)
+#'
+#' plot_rstack3d(s_mixed,
+#'               colramp = palettes_list,
+#'               z_limits = NULL,
+#'               y_tilt = 0.7,
+#'               y_layer_shift = 65,
+#'               alpha = 1)
 #'
 #' @export
-
-
-
 
 
 
