@@ -16,12 +16,6 @@
 #' applications such as habitat suitability, species utilization distributions (UDs),
 #' and other continuous spatial variables.
 #'
-#''pathlyXYZ' added features:
-#'
-#'
-#'
-#'
-#'
 #' @param rstack RasterStack (from `raster`) or SpatRaster (from `terra`) object containing the layers to plot.
 #' @param n_layers Integer specifying the number of layers from the stack to plot.
 #'        By default, all layers are plotted.
@@ -132,13 +126,102 @@
 #'               y_tilt = 0.7,
 #'               y_layer_shift = 65,
 #'               alpha = 1)
+#'}
+#'-----------------------------------------------------------------------------
+#'
 #'
 #' @export
+plot_rstack3d <- function(rstack,
+                          n_layers = NULL,
+                          idx_layers = NULL,
+                          y_tilt = 1.25,
+                          y_layer_shift = 10,
+                          angle_rotate = pi/20,
+                          cols = NULL,
+                          alpha = 1,
+                          colramp = NULL,
+                          z_limits = "auto", # 'auto', 'custom limits: c(0,1)'
+                                             # or c(min,max) values based on values of stack
+                          # legend = FASLE (in develop)
+                          parallel = TRUE,
+                          top_bottom = "up") {
+
+  # Dependencies check -----------------------------
+  if (!requireNamespace("layer", quietly = TRUE)) stop("Package 'layer' is required.")
+  if (!requireNamespace("terra", quietly = TRUE)) stop("Package 'terra' is required.")
+  if (!requireNamespace("ggplot2", quietly = TRUE)) stop("Package 'ggplot2' required.")
+  if (!requireNamespace("ggnewscale", quietly = TRUE)) stop("Package 'ggnewscale' required.")
+
+  stopifnot(inherits(rstack, "RasterStack") | inherits(rstack, "SpatRaster"))
+  stopifnot(top_bottom %in% c("up","bottom"))
+  # ------------------------------------------------
+
+  # Processing stack for tilted and plot each layer individually ------
+
+  # check rstack class / using terra (transform)
+  # for use terra or raster package
+  if (inherits(rstack, "RasterStack")) rstack <- terra::rast(rstack)  # transfrom for terra
+
+  # create a list of layers for tilting --------------------------
+
+  # select stack layer based on user preferences
+  # option 1 null idx_layer and n_layer null
+  # option 2 idx_layer and null n_layer
+  # option 3 null idx_layer and n_layer
+
+  # priority: idx_layers > n_layers > todas
+  if (!is.null(idx_layers)) {
+    layers_list <- terra::as.list(rstack[[idx_layers]])
+  } else if (!is.null(n_layers)) {
+    layers_list <- terra::as.list(rstack[[1:min(n_layers, terra::nlyr(rstack))]])
+  } else {
+    layers_list <- terra::as.list(rstack)
+  }
+
+  # processing tilt layers -----------------------------------------
+  # note: could take some minutes in processing (See function documentation)
+
+  tilt_list <- list()
+
+  for (i in seq_along(layers_list)) {
+    lyr <- layers_list[[i]]
+
+    # Calculate vertical shift (up or bottom direction)
+    direction <- if (top_bottom == "up") -1 else 1
+    y_shift <- (i - 1) * y_layer_shift * direction
+
+    tilt_layer <- layer::tilt_map(lyr,
+                                  angle_rotate = angle_rotate,
+                                  y_shift = y_shift,
+                                  y_tilt = y_tilt,
+                                  parallel = parallel)
+    tilt_list[[i]] <- tilt_layer
+  }
 
 
+  # plot tilt layers ----------------------------------------------------
+  # main differences with 'layer' package
 
+  # If colramp is provided by user,
+  # use our custom internal function to fix the 0-1 scale issue
 
+  if (!is.null(colramp)) {
+    p <- plot_tiltedmaps_helper(
+      map_list = tilt_list,
+      colramp  = colramp,
+      limits   = z_limits, # "auto", c(min, max), o NULL
+      alpha    = alpha
+    )
+  } else {
+    # Si el usuario quiere escalas independientes pero con paletas
+    # predefinidas (viridis, etc)
+    # El paquete 'layer' original ya hace esto por defecto.
+    pal_name <- if (!is.null(cols)) cols else "viridis"
+    p <- layer::plot_tiltedmaps(tilt_list, palette = pal_name, alpha = alpha)
+  }
 
+  return(p)
+}
 
 
 # -----------------------------------------------------------------------------
@@ -150,10 +233,9 @@
 #' This fixes the issue where each layer in layer::plot_tiltedmaps gets its
 #' own independent color scale, making comparisons impossible between tilted layers,
 #' in order to plot 2.5D continuos variables stack (SDM, UD, etc).
-#'
+
+#' @noRd
 #' @keywords internal
-
-
 plot_tiltedmaps_helper <- function(map_list, colramp, limits = "auto", alpha = 1) {
   if (length(alpha) == 1) alpha <- rep(alpha, length(map_list))
 
@@ -203,109 +285,6 @@ plot_tiltedmaps_helper <- function(map_list, colramp, limits = "auto", alpha = 1
   }
   return(p + ggplot2::theme_void())
 }
-
-
-
-# -----------------------------------------------------------------------------
-# function (main)
-
-plot_rstack3d <- function(rstack,
-                          n_layers = NULL,
-                          idx_layers = NULL,
-                          y_tilt = 1.25,
-                          y_layer_shift = 10,
-                          angle_rotate = pi/20,
-                          cols = NULL,
-                          alpha = 1,
-                          colramp = NULL,
-                          z_limits = "auto", # 'auto', 'custom limits: c(0,1)'
-                                             # or c(min,max) values based on values of stack
-                          # legend = FASLE,
-                          parallel = TRUE,
-                          top_bottom = "up") {
-
-  # Dependencies check -----------------------------
-  if (!requireNamespace("layer", quietly = TRUE)) stop("Package 'layer' is required.")
-  if (!requireNamespace("terra", quietly = TRUE)) stop("Package 'terra' is required.")
-  if (!requireNamespace("ggplot2", quietly = TRUE)) stop("Package 'ggplot2' required.")
-  if (!requireNamespace("ggnewscale", quietly = TRUE)) stop("Package 'ggnewscale' required.")
-
-  stopifnot(inherits(rstack, "RasterStack") | inherits(rstack, "SpatRaster"))
-  stopifnot(top_bottom %in% c("up","bottom"))
-  # ------------------------------------------------
-
-  # Processing stack for tilted and plot each layer individually ------
-
-  # check rstack class / using terra (transform)
-  # for use terra or raster package
-  if (inherits(rstack, "RasterStack")) rstack <- terra::rast(rstack)  # transfrom for terra
-
-  # create a list of layers for tilting --------------------------
-
-  # select stack layer based on user preferences
-  # option 1 null idx_layer and n_layer null
-  # option 2 idx_layer and null n_layer
-  # option 3 null idx_layer and n_layer
-
-  # priority: idx_layers > n_layers > todas
-  if (!is.null(idx_layers)) {
-    layers <- terra::as.list(rstack[[idx_layers]])
-  } else if (!is.null(n_layers)) {
-    layers <- terra::as.list(rstack[[1:min(n_layers, terra::nlyr(rstack))]])
-  } else {
-    layers <- terra::as.list(rstack)
-  }
-
-  # processing tilt layers -----------------------------------------
-  # note: could take some minutes in processing (See function documentation)
-
-  tilt_list <- list()
-
-  tilt_list <- list()
-
-  for (i in seq_along(layers)) {
-    lyr <- layers[[i]]
-
-    # Calculate vertical shift
-    direction <- if (top_bottom == "up") -1 else 1
-    y_shift <- (i - 1) * y_layer_shift * direction
-
-    tilt_layer <- layer::tilt_map(lyr,
-                                  angle_rotate = angle_rotate,
-                                  y_shift = y_shift,
-                                  y_tilt = y_tilt,
-                                  parallel = parallel)
-    tilt_list[[i]] <- tilt_layer
-  }
-
-
-  # plot tilt layers ----------------------------------------------------
-  # main differences with 'layer' package
-
-  # If colramp is provided by user,
-  # use our custom internal function to fix the 0-1 scale issue
-
-  if (!is.null(colramp)) {
-    p <- plot_tiltedmaps_helper(
-      map_list = tilt_list,
-      colramp  = colramp,
-      limits   = z_limits, # "auto", c(min, max), o NULL
-      alpha    = alpha
-    )
-  } else {
-    # Si el usuario quiere escalas independientes pero con paletas
-    # predefinidas (viridis, etc)
-    # El paquete 'layer' original ya hace esto por defecto.
-    pal_name <- if (!is.null(cols)) cols else "viridis"
-    p <- layer::plot_tiltedmaps(tilt_list, palette = pal_name, alpha = alpha)
-  }
-
-  return(p)
-}
-
-
-
-
 
 
 
