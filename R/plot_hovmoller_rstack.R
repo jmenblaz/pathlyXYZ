@@ -447,7 +447,7 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
 
 
   # for rev plots and improve Y axi label plots
-  y_ticks_coords <- stats::pretty(z_values_final, n = y_ticks)
+  y_ticks_coords <- base::pretty(z_values_final, n = y_ticks)
 
 
   # Plot Hovmöller plot using levelplot ----------------------------------------
