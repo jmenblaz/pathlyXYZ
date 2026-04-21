@@ -296,7 +296,7 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
   # the results are cohrent, but not in a mix)
 
   # Extract values into pts for layers -------------------------------------------
-  names(rstack) <- as.character(1:nlyr(rstack))  # layer names for Hovmoller plot
+  names(rstack) <- as.character(1:terra::nlyr(rstack))  # layer names for Hovmoller plot
   vals <- terra::extract(rstack,  terra::vect(pts))
 
   # add coordinates into vals
