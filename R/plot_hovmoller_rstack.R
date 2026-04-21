@@ -4,6 +4,11 @@
 # pathlyXYZ - plot_hovmoller_rstack.R
 # ------------------------------------------------------------------------------
 
+# for further R package
+if(getRversion() >= "2.15.1") {
+  utils::globalVariables(c("dist_m", "z_layer", "value", "layer_index"))
+}
+
 # @jmenblaz / J. Menéndez-Blázquez
 
 #' Hovmöller plot (Vertical section) from raster stack of continuous values layered
@@ -55,9 +60,9 @@
 #' @return A `trellis` object (from `lattice` via `rasterVis`).
 #'
 #' @details
-#' @note
-#' This function uses the native R pipe \code{|>} and requires R version 4.1.0 or higher.
-#' The function follows a streamlined workflow:
+#' #' This function performs a 2D bilinear interpolation (using the akima package)
+#' between the vertical layers of a raster stack to create a continuous
+#' cross-section along a geographical transect.
 #'
 #' 1. **Spatial Alignment**: Synchronizes CRS between the transect and raster stack,
 #'    clipping the line to the data extent to ensure valid extraction.
@@ -74,7 +79,9 @@
 #'    implemented label text with geographic coordinates (Lat/Lon) on the X-axis,
 #'    and choose the scale values for the color ramp.
 #'
-#'
+#' @note
+#' This function uses the native R pipe \code{|>} and requires R version 4.1.0 or higher.
+#' The function follows a streamlined workflow:
 #'
 #' @examples
 #' \donttest{
@@ -150,15 +157,18 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
 
 
   # Dependencies check -----------------------------
-  if (!requireNamespace("sf", quietly = TRUE)) stop("El paquete 'sf' es requerido para datos vectoriales.")
-  if (!requireNamespace("terra", quietly = TRUE)) stop("El paquete 'terra' es requerido (sucesor de raster).")
-  if (!requireNamespace("dplyr", quietly = TRUE)) stop("El paquete 'dplyr' es requerido para manipulación de datos.")
-  if (!requireNamespace("ggplot2", quietly = TRUE)) stop("El paquete 'ggplot2' es requerido para visualización.")
-  if (!requireNamespace("tidyverse", quietly = TRUE)) stop("El paquete 'tidyverse' es requerido.")
-  if (!requireNamespace("ggnewscale", quietly = TRUE)) stop("El paquete 'ggnewscale' es requerido para múltiples leyendas.")
-  if (!requireNamespace("tidyterra", quietly = TRUE)) stop("El paquete 'tidyterra' es requerido para usar terra con ggplot2.")
-  if (!requireNamespace("rasterVis", quietly = TRUE)) stop("El paquete 'rasterVis' es requerido para métodos de visualización avanzada.")
-
+  if (!requireNamespace("sf", quietly = TRUE)) stop("Package 'sf' is required for vector data operations.")
+  if (!requireNamespace("terra", quietly = TRUE)) stop("Package 'terra' is required (successor to raster).")
+  if (!requireNamespace("dplyr", quietly = TRUE)) stop("Package 'dplyr' is required for data manipulation.")
+  if (!requireNamespace("tidyr", quietly = TRUE)) stop("Package 'tidyr' is required for data restructuring.")
+  if (!requireNamespace("ggplot2", quietly = TRUE)) stop("Package 'ggplot2' is required for visualization.")
+  if (!requireNamespace("grDevices", quietly = TRUE)) stop("Package 'grDevices' is required for visualization.")
+  if (!requireNamespace("ggnewscale", quietly = TRUE)) stop("Package 'ggnewscale' is required for multiple legend scales.")
+  if (!requireNamespace("tidyterra", quietly = TRUE)) stop("Package 'tidyterra' is required for terra and ggplot2 integration.")
+  if (!requireNamespace("rasterVis", quietly = TRUE)) stop("Package 'rasterVis' is required for advanced raster visualization.")
+  if (!requireNamespace("akima", quietly = TRUE)) stop("Package 'akima' is required for vertical interpolation.")
+  if (!requireNamespace("lattice", quietly = TRUE)) stop("Package 'lattice' is required for levelplot rendering.")
+  if (!requireNamespace("raster", quietly = TRUE)) stop("Package 'raster' is required for legacy raster handling.")
 
   # Pre-processing for Hovmoller plot into transect (line) in the rstack exten area
   # check raster clas
@@ -226,21 +236,21 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
 
   if (visual_info) {
     # base
-    plot(rstack[[1]],
-         col = colorRampPalette(c("grey97", "grey60", "grey20"))(100))
+    terra::plot(rstack[[1]],
+        col = grDevices::colorRampPalette(c("grey97", "grey60", "grey20"))(100))
     # extent
-    plot(terra::ext(rstack),
+    graphics::plot(terra::ext(rstack),
          add = TRUE,
          border = col_ext,
          lwd = 10)
 
     # Line
-    plot(sf::st_geometry(tr), add = TRUE, col = "black", lwd = 5)
-    plot(sf::st_geometry(tr), add = TRUE, col = col_line, lwd = 3)
+    graphics::plot(sf::st_geometry(tr), add = TRUE, col = "black", lwd = 5)
+    graphics::plot(sf::st_geometry(tr), add = TRUE, col = col_line, lwd = 3)
 
     # 4. Títulos dinámicos
-    title(main = "QC: Transect vs Raster Extent Alignment", line = 3)
-    title(sub = paste("Status:", status_msg), col.sub = col_ext, font.sub = 2)
+    graphics::title(main = "QC: Transect vs Raster Extent Alignment", line = 3)
+    graphics::title(sub = paste("Status:", status_msg), col.sub = col_ext, font.sub = 2)
   }
 
 
@@ -282,10 +292,10 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
 
   # add points into visual info
   if (visual_info) {
-    plot(rstack[[1]],
-         col = colorRampPalette(c("grey97", "grey60", "grey20"))(100))
+    terra::plot(rstack[[1]],
+         col = grDevices::colorRampPalette(c("grey97", "grey60", "grey20"))(100))
     # plot(st_geometry(tr))
-    plot(sf::st_geometry(pts),
+    graphics::plot(sf::st_geometry(pts),
          add = TRUE, col = "red", cex = 0.2)
   }
 
@@ -334,17 +344,17 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
 
   # Create long dataframe for (1) interpolate and (2) plot --------
   vals_long <- vals |>
-    pivot_longer(
-      cols = matches("^[0-9]+$"),
+  tidyr::pivot_longer(
+      cols = tidyr::matches("^[0-9]+$"),
       names_to = "layer_index",
       values_to = "value"
     ) |>
-    mutate(
+    dplyr::mutate(
       layer_index = as.numeric(layer_index),
       # asign Z value
       z_layer = z_values_final[layer_index]
     ) |>
-    filter(!is.na(value), !is.infinite(value))
+    dplyr::filter(!is.na(value), !is.infinite(value))
 
 
   # interpolate values between layer based on z values  --------------------------
@@ -352,7 +362,7 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
   if (is.null(ny)) ny = max(z_values_final) / 1.1
 
   # interpolate using akima R package
-  interp_res <- suppressWarnings(with(vals_long,
+  interp_res <- utils::suppressWarnings(with(vals_long,
                      akima::interp(
                        x = dist_m,
                        y = z_layer,
@@ -408,14 +418,16 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
   if (!is.null(colramp_breaks)) {
     n_colors <- colramp_breaks
     # Re-generamos la rampa para que coincida exactamente con los breaks pedidos
-    colramp <- colorRampPalette(colramp)(n_colors)
+    colramp <- grDevices::colorRampPalette(colramp)(n_colors)
   } else {
     n_colors <- length(colramp)
   }
 
   # minmax values of terra
-  r_min <- terra::minmax(terra::rast(r)) [1]
-  r_max <- terra::minmax(terra::rast(r)) [2]
+  r_min <- raster::minValue(r)
+  r_max <- raster::maxValue(r)
+  # r_min <- terra::minmax(terra::rast(r)) [1]
+  # r_max <- terra::minmax(terra::rast(r)) [2]
 
 
   # En lattice/levelplot, necesitamos n_colors + 1 puntos de corte
@@ -435,7 +447,7 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
 
 
   # for rev plots and improve Y axi label plots
-  y_ticks_coords <- pretty(z_values_final, n = y_ticks)
+  y_ticks_coords <- stats::pretty(z_values_final, n = y_ticks)
 
 
   # Plot Hovmöller plot using levelplot ----------------------------------------
@@ -462,18 +474,14 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
                             ),
                             # panel
                             panel = function(...) {
-                              panel.levelplot(...)  # relleno
-                              panel.contourplot(...,
+                              lattice::panel.levelplot(...)  # relleno
+                              lattice::panel.contourplot(...,
                                                 col = contour_col,
                                                 alpha = contour_alpha,
                                                 lwd = contour_lwd)})
-  # process plot
-  # aspect 1:1
-  p <- update(p, aspect = plot_relation)
 
-  # # revert plot (from up to bottom)
-  # First version - only chnage raster values, not marginal plots
-  # if (rev) p <- update(p, ylim = rev(p$y.limits)) # revert Y axy
+  # process plot
+  p <- stats::update(p, aspect = plot_relation)
 
   # margin plots
   margin_plot <- tolower(trimws(as.character(margin_plot)))
@@ -486,7 +494,6 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
     p$legend$top   <- NULL
   }
 
-  # plot just to apply function
   if (plot) print(p)
 
   return(p)

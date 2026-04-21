@@ -106,9 +106,10 @@ A \code{trellis} object (from \code{lattice} via \code{rasterVis}).
 values between layers.
 (e.g., Copernicus Marine Services environmental variables, 3D Habitat suitability, etc)
 }
-\note{
-This function uses the native R pipe \code{|>} and requires R version 4.1.0 or higher.
-The function follows a streamlined workflow:
+\details{
+#' This function performs a 2D bilinear interpolation (using the akima package)
+between the vertical layers of a raster stack to create a continuous
+cross-section along a geographical transect.
 \enumerate{
 \item \strong{Spatial Alignment}: Synchronizes CRS between the transect and raster stack,
 clipping the line to the data extent to ensure valid extraction.
@@ -122,6 +123,10 @@ between discrete vertical bins, creating a continuous cross-section.
 implemented label text with geographic coordinates (Lat/Lon) on the X-axis,
 and choose the scale values for the color ramp.
 }
+}
+\note{
+This function uses the native R pipe \code{|>} and requires R version 4.1.0 or higher.
+The function follows a streamlined workflow:
 }
 \examples{
 \donttest{
