@@ -362,7 +362,7 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
   if (is.null(ny)) ny = max(z_values_final) / 1.1
 
   # interpolate using akima R package
-  interp_res <- utils::suppressWarnings(with(vals_long,
+  interp_res <- base::suppressWarnings(with(vals_long,
                      akima::interp(
                        x = dist_m,
                        y = z_layer,
