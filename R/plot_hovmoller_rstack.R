@@ -55,6 +55,8 @@
 #' @return A `trellis` object (from `lattice` via `rasterVis`).
 #'
 #' @details
+#' @note
+#' This function uses the native R pipe \code{|>} and requires R version 4.1.0 or higher.
 #' The function follows a streamlined workflow:
 #'
 #' 1. **Spatial Alignment**: Synchronizes CRS between the transect and raster stack,
@@ -92,8 +94,8 @@
 #' # 2. Create a transect line within the raster extent
 #' p1 <- matrix(c(-0.08, -0.08), ncol = 2)
 #' p2 <- matrix(c(0.08, 0.08), ncol = 2)
-#' tr <- sf::st_linestring(rbind(p1, p2)) %>%
-#'   sf::st_sfc(crs = "EPSG:4326") %>%
+#' tr <- sf::st_linestring(rbind(p1, p2)) |>
+#'   sf::st_sfc(crs = "EPSG:4326") |>
 #'   sf::st_as_sf()
 #'
 #' # 3. Run pathlyXYZ custom Hovmoller or Vertical section plot
@@ -186,8 +188,8 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
 
   # 2.1 Convertimos la extensión del raster a un polígono sf
   # 2.1 Convert extent of rstack into polygon for fuerther analysis
-  r_ext <- terra::ext(rstack) %>%
-    terra::as.polygons() %>%
+  r_ext <- terra::ext(rstack) |>
+    terra::as.polygons() |>
     sf::st_as_sf()
 
   sf::st_crs(r_ext) <- terra::crs(rstack) # re-asign CRS
@@ -331,17 +333,17 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
 
 
   # Create long dataframe for (1) interpolate and (2) plot --------
-  vals_long <- vals %>%
+  vals_long <- vals |>
     pivot_longer(
       cols = matches("^[0-9]+$"),
       names_to = "layer_index",
       values_to = "value"
-    ) %>%
+    ) |>
     mutate(
       layer_index = as.numeric(layer_index),
       # asign Z value
       z_layer = z_values_final[layer_index]
-    ) %>%
+    ) |>
     filter(!is.na(value), !is.infinite(value))
 
 

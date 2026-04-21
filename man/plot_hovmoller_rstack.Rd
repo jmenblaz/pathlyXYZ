@@ -106,7 +106,8 @@ A \code{trellis} object (from \code{lattice} via \code{rasterVis}).
 values between layers.
 (e.g., Copernicus Marine Services environmental variables, 3D Habitat suitability, etc)
 }
-\details{
+\note{
+This function uses the native R pipe \code{|>} and requires R version 4.1.0 or higher.
 The function follows a streamlined workflow:
 \enumerate{
 \item \strong{Spatial Alignment}: Synchronizes CRS between the transect and raster stack,
@@ -140,8 +141,8 @@ names(rstack) <- paste0("layer_", 1:6)
 # 2. Create a transect line within the raster extent
 p1 <- matrix(c(-0.08, -0.08), ncol = 2)
 p2 <- matrix(c(0.08, 0.08), ncol = 2)
-tr <- sf::st_linestring(rbind(p1, p2)) \%>\%
-  sf::st_sfc(crs = "EPSG:4326") \%>\%
+tr <- sf::st_linestring(rbind(p1, p2)) |>
+  sf::st_sfc(crs = "EPSG:4326") |>
   sf::st_as_sf()
 
 # 3. Run pathlyXYZ custom Hovmoller or Vertical section plot

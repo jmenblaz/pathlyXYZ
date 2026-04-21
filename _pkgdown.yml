@@ -1,0 +1,52 @@
+# _pkgdown.yml - pathlyXYZ
+url: https://jmenblaz.github.io/pathlyXYZ/
+
+# Plantilla
+template:
+  bootstrap: 5
+
+# Navbar
+navbar:
+  type: default
+  title: pathlyXYZ
+  left:
+    - text: Home
+      href: index.html
+    - text: Reference
+      href: reference/index.html
+    - text: Articles
+      href: articles/index.html
+    - text: GitHub
+      href: https://github.com/jmenblaz/pathlyXYZ
+      icon: fab fa-github
+
+# Logo y favicon
+logo: man/figures/pathlyXYZ_logo_bg_white.svg
+favicon: man/figures/pathlyXYZ_logo_bg_white.svg
+
+# Home
+home:
+  title: pathlyXYZ
+  subtitle: "3D animal movement simulation and analysis framework"
+  # Si tienes README.md, pkgdown lo usará automáticamente como contenido de portada
+
+# Artículos / Vignettes
+articles:
+  - title: "Introduction to pathlyXYZ"
+    contents:
+      - vignettes/01-introduction.Rmd
+  - title: "3D VAR-based CRW"
+    contents:
+      - vignettes/02-3D-CRW-VAR.Rmd
+  - title: "Pseudo-absence generation"
+    contents:
+      - vignettes/04-pseudo-absence-example.Rmd
+
+# Extra options
+authors:
+  - name: "Javier Menéndez-Blázquez"
+    role: author
+    url: https://github.com/jmenblaz
+
+# SEO y metadata
+description: "Flexible R framework for 3D animal movement simulation, including VAR-based CRW and pseudo-absence generation."

@@ -1,12 +1,31 @@
 Package: pathlyXYZ
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: An R package for simulating, exploring, and visualizing multidimensional (2.5/3D) bio-logging data 
+Version: 0.0.1.9000
 Authors@R: 
-    person("Javier", "Menéndez-Blázquez", , "first.last@example.com", role = c("aut", "cre"),
+    person("Javier", "Menéndez-Blázquez", , "jmenendezblazquez.gis@gmail.com", role = c("aut", "cre", "cph", "ctb"),
            comment = c(ORCID = "0000-0002-1882-7896"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: A toolkit for processing, simulating, and visualizing 2.5D and 3D 
+    spatial data. It provides workflows to integrate movement trajectories 
+    (bio-logging) with multi-layered environmental variables across vertical 
+    dimensions such as altitude, depth, or pressure. Key features include the 
+    generation of vertical sections (e.g.: Hovmöller plots) along complex 
+    transects, multidimensional path simulation, and raster stack manipulation 
+    for spatial ecology and environmental research.
+License: GPL-3
 Encoding: UTF-8
+LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+Depends: 
+    R (>= 4.1.0)
+Imports: 
+    terra,
+    sf,
+    raster,
+    rasterVis,
+    akima,
+    dplyr,
+    tidyr,
+    ggplot2,
+    viridis,
+    lattice
