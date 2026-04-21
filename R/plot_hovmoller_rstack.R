@@ -34,7 +34,7 @@
 #' Default `1:1`, but it can be change based on user preferences.
 #' @param colramp A color palette or vector of colors for the plot. Default `viridis::viridis(100)`.
 #' @param colramp_breaks Numeric. Number of breaks for color ramp (this parameter is linked to contours)
-#' @param val_range Vector. `NULL` by default, (1) calculate by min and max stack values;
+#' @param val_range Vector. `NULL` by default, (1) calculate by min and max from stack values;
 #' or (2) custom values range for plot e.g.: c(0,1).
 #' @param rev Logical. If `FALSE` (default), reverses or not the Y-axis (useful for depth profiles).
 #' @param contour Logical `FALSE` (default), If `TRUE`, adds contour lines to the plot, and

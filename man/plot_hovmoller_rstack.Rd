@@ -68,7 +68,7 @@ Default \code{1:1}, but it can be change based on user preferences.}
 
 \item{colramp_breaks}{Numeric. Number of breaks for color ramp (this parameter is linked to contours)}
 
-\item{val_range}{Vector. \code{NULL} by default, (1) calculate by min and max stack values;
+\item{val_range}{Vector. \code{NULL} by default, (1) calculate by min and max from stack values;
 or (2) custom values range for plot e.g.: c(0,1).}
 
 \item{rev}{Logical. If \code{FALSE} (default), reverses or not the Y-axis (useful for depth profiles).}
