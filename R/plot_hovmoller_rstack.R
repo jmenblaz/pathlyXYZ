@@ -6,13 +6,13 @@
 
 # @jmenblaz / J. Menéndez-Blázquez
 
-#' Hovmöller plot (Vertical section) from raster stack along line / trasenct
-#' or SpatRaster of continuos values in 2.5 acroos Z dimension
+#' Hovmöller plot (Vertical section) from raster stack of continuous values layered
+#'  along line / transect across Z dimension
 #'
 #' `plot_hovmoller_rstack()` visualizes a vertical cross-section of spatial data
 #' (SpatRaster/RasterStack) along a specific transect (sf LINESTRING). It interpolates
 #' values between layers.
-#' (e.g., Copernicus Marine Services enviromenal variables, 3D Habitat suitability, etc)
+#' (e.g., Copernicus Marine Services environmental variables, 3D Habitat suitability, etc)
 #'
 #' @param rstack A `terra::SpatRaster` or `raster::RasterStack` with multiple layers
 #' representing different depths or altitudes.

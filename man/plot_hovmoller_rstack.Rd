@@ -2,8 +2,8 @@
 % Please edit documentation in R/plot_hovmoller_rstack.R
 \name{plot_hovmoller_rstack}
 \alias{plot_hovmoller_rstack}
-\title{Hovmöller plot (Vertical section) from raster stack along line / trasenct
-or SpatRaster of continuos values in 2.5 acroos Z dimension}
+\title{Hovmöller plot (Vertical section) from raster stack of continuous values layered
+along line / transect across Z dimension}
 \usage{
 plot_hovmoller_rstack(
   rstack,
@@ -104,7 +104,7 @@ A \code{trellis} object (from \code{lattice} via \code{rasterVis}).
 \code{plot_hovmoller_rstack()} visualizes a vertical cross-section of spatial data
 (SpatRaster/RasterStack) along a specific transect (sf LINESTRING). It interpolates
 values between layers.
-(e.g., Copernicus Marine Services enviromenal variables, 3D Habitat suitability, etc)
+(e.g., Copernicus Marine Services environmental variables, 3D Habitat suitability, etc)
 }
 \details{
 The function follows a streamlined workflow:
