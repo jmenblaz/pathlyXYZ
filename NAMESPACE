@@ -3,7 +3,7 @@
 export(check_sequeira_names)
 export(gen_path)
 export(length_path3d)
-export(plot_hovmoller_rstack_dev)
+export(plot_hovmoller_rstack)
 export(plot_path3d)
 export(plot_rstack3d)
 export(sequeira_names)

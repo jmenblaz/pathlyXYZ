@@ -137,7 +137,7 @@ if(getRversion() >= "2.15.1") {
 #'-----------------------------------------------------------------------------
 #'
 #' @export
-plot_hovmoller_rstack_dev <- function(rstack, tr, z_values,
+plot_hovmoller_rstack <- function(rstack, tr, z_values,
                                   quiet = FALSE,
                                   visual_info = FALSE,
                                   # resolution (distance between points sample)
