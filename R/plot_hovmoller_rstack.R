@@ -389,8 +389,6 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
   # convert to raster (not terra, works propertly with levelplot)
   r <- raster::raster(list(x = interp_res$x, y = interp_res$y, z = interp_res$z))
 
-  # r <- raster::raster(list(x = interp_res$x, y = interp_res$y, vals = interp_res$z))
-
   # ----------------------------------------------------------------------------
   # ----------------------------------------------------------------------------
   # Plot -----------------------------------------------------------------------
@@ -404,8 +402,7 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
   z_min_plot <- if (!is.null(zlim)) min(zlim) else min(z_values_final)
   z_max_plot <- if (!is.null(zlim)) max(zlim) else max(z_values_final)
 
-  # 3. La clave: Invertir el ylim en la llamada a levelplot
-  # En R, si pones ylim = c(150, 0), el gráfico se invierte automáticamente
+  # Invertir el ylim en la llamada a levelplot (avoid issues during plot)
   y_limits <- if(rev) c(z_max_plot, z_min_plot) else c(z_min_plot, z_max_plot)
 
   # # custom ticks
