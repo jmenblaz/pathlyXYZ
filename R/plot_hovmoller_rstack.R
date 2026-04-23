@@ -1,5 +1,8 @@
 
 
+
+
+
 # ------------------------------------------------------------------------------
 # pathlyXYZ - plot_hovmoller_rstack.R
 # ------------------------------------------------------------------------------
@@ -53,7 +56,8 @@ if(getRversion() >= "2.15.1") {
 #' @param cex_x Numeri. Font size for label in X axi.
 #' The actual number of labels is dynamically optimized to provide "pretty" (rounded) values.
 #' @param margin_plot Character. Internal margin plots to show. Default `"none"`, `"top"`, `"righ"`
-#' @param zlim Numeric vector `c(min, max)` for the Y-axis limits.
+#' @param zlim Numeric vector `c(min, max)` for the Z axy represent into
+#' Y of vertical section plotlimits.
 #'
 #' @param ... Additional arguments passed to `rasterVis::levelplot`.
 #'
@@ -82,6 +86,16 @@ if(getRversion() >= "2.15.1") {
 #' @note
 #' This function uses the native R pipe \code{|>} and requires R version 4.1.0 or higher.
 #' The function follows a streamlined workflow:
+#'
+#'#' @section Future Developments in the function:
+#' \itemize{
+#'   \item \bold{Interactive Transects:} Future versions will integrate \code{mapedit}
+#'   to allow users to draw transects directly on a map interface as complement of
+#'   providing a pre-defined \code{sf} object.
+#'   \item \bold{Layer Subsetting:} The \code{idx_layer} parameter will allow
+#'   selective processing of specific stack layers, improving performance
+#'   when dealing with high-resolution vertical data.
+#' }
 #'
 #' @examples
 #' \donttest{
@@ -123,7 +137,7 @@ if(getRversion() >= "2.15.1") {
 #'-----------------------------------------------------------------------------
 #'
 #' @export
-plot_hovmoller_rstack <- function(rstack, tr, z_values,
+plot_hovmoller_rstack_dev <- function(rstack, tr, z_values,
                                   quiet = FALSE,
                                   visual_info = FALSE,
                                   # resolution (distance between points sample)
@@ -141,9 +155,9 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
                                   val_range = NULL,
                                   rev = FALSE, # logic,
                                   contour = FALSE, # False logic
-                                    contour_col = "black",
-                                    contour_alpha = 0.4,
-                                    contour_lwd = 0.5,  # line width
+                                  contour_col = "black",
+                                  contour_alpha = 0.4,
+                                  contour_lwd = 0.5,  # line width
                                   margin_plot = 'none', # 'none', 'top', 'right'
                                   # labels and font size
                                   y_ticks = 5,
@@ -237,12 +251,12 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
   if (visual_info) {
     # base
     terra::plot(rstack[[1]],
-        col = grDevices::colorRampPalette(c("grey97", "grey60", "grey20"))(100))
+                col = grDevices::colorRampPalette(c("grey97", "grey60", "grey20"))(100))
     # extent
     graphics::plot(terra::ext(rstack),
-         add = TRUE,
-         border = col_ext,
-         lwd = 10)
+                   add = TRUE,
+                   border = col_ext,
+                   lwd = 10)
 
     # Line
     graphics::plot(sf::st_geometry(tr), add = TRUE, col = "black", lwd = 5)
@@ -293,10 +307,10 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
   # add points into visual info
   if (visual_info) {
     terra::plot(rstack[[1]],
-         col = grDevices::colorRampPalette(c("grey97", "grey60", "grey20"))(100))
+                col = grDevices::colorRampPalette(c("grey97", "grey60", "grey20"))(100))
     # plot(st_geometry(tr))
     graphics::plot(sf::st_geometry(pts),
-         add = TRUE, col = "red", cex = 0.2)
+                   add = TRUE, col = "red", cex = 0.2)
   }
 
   # calculate distance in the transect (for further interpolation)
@@ -344,7 +358,7 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
 
   # Create long dataframe for (1) interpolate and (2) plot --------
   vals_long <- vals |>
-  tidyr::pivot_longer(
+    tidyr::pivot_longer(
       cols = tidyr::matches("^[0-9]+$"),
       names_to = "layer_index",
       values_to = "value"
@@ -363,19 +377,19 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
 
   # interpolate using akima R package
   interp_res <- base::suppressWarnings(with(vals_long,
-                     akima::interp(
-                       x = dist_m,
-                       y = z_layer,
-                       z = value,
-                       nx = nx, # x matrix == points (latitud)
-                       ny = ny,   # y matrix (z dimension)
-                       duplicate = "mean"
-                     )))
+                                            akima::interp(
+                                              x = dist_m,
+                                              y = z_layer,
+                                              z = value,
+                                              nx = nx, # x matrix == points (latitud)
+                                              ny = ny,   # y matrix (z dimension)
+                                              duplicate = "mean"
+                                            )))
 
   # convert to raster (not terra, works propertly with levelplot)
   r <- raster::raster(list(x = interp_res$x, y = interp_res$y, z = interp_res$z))
 
-
+  # r <- raster::raster(list(x = interp_res$x, y = interp_res$y, vals = interp_res$z))
 
   # ----------------------------------------------------------------------------
   # ----------------------------------------------------------------------------
@@ -384,14 +398,15 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
   # check plot parameters
   if (is.null(z_units)) z_label <- " "
   if (!is.null(z_units)) z_label <- z_units # e.g., Depth (m)
-  if (is.null(zlim)) zlim <- c(0, (max(z_values_final) + 0.1))  # add 0.1 for improve plot visualization limits
+  if (is.null(zlim)) zlim <- c((min(z_values_final) - 0.1), (max(z_values_final) + 0.1))  # add 0.1 for improve plot visualization limits
 
-  # Rev raster for correct vertical horientation (depth/altited)
-  # and include the marginal plots associate
-  if (rev) {
-    r <- raster::flip(r, direction = "y")
-  }
+  # zlim
+  z_min_plot <- if (!is.null(zlim)) min(zlim) else min(z_values_final)
+  z_max_plot <- if (!is.null(zlim)) max(zlim) else max(z_values_final)
 
+  # 3. La clave: Invertir el ylim en la llamada a levelplot
+  # En R, si pones ylim = c(150, 0), el gráfico se invierte automáticamente
+  y_limits <- if(rev) c(z_max_plot, z_min_plot) else c(z_min_plot, z_max_plot)
 
   # # custom ticks
   # extract coordinates from 5 pts in the trasect / line for plotting ----------
@@ -447,14 +462,15 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
 
 
   # for rev plots and improve Y axi label plots
-  y_ticks_coords <- base::pretty(z_values_final, n = y_ticks)
+  # based on z limits forrach visualization
+  y_ticks_coords <- base::pretty(c(z_min_plot, z_max_plot), n = y_ticks)
 
 
   # Plot Hovmöller plot using levelplot ----------------------------------------
   # rasterVis wrapper and levelplot function()
   p <- rasterVis::levelplot(r,
                             ylab = z_label,      # label axy Y or (z units)
-                            ylim = zlim,
+                            ylim = y_limits,  # based on zlim
                             at = at_breaks,  # custom values range
                             # labels = TRUE,
                             # margin = list(name = "latitude", FUN = "mean"),
@@ -469,16 +485,16 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
                                 rot = 0),
                               y = list(cex = cex_y,
                                        at = y_ticks_coords,
-                                       labels = if(rev) rev(y_ticks_coords) else y_ticks_coords
+                                       labels = y_ticks_coords
                               )
                             ),
                             # panel
                             panel = function(...) {
                               lattice::panel.levelplot(...)  # relleno
                               lattice::panel.contourplot(...,
-                                                col = contour_col,
-                                                alpha = contour_alpha,
-                                                lwd = contour_lwd)})
+                                                         col = contour_col,
+                                                         alpha = contour_alpha,
+                                                         lwd = contour_lwd)})
 
   # process plot
   p <- stats::update(p, aspect = plot_relation)
@@ -500,9 +516,4 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
 }
 
 # ------------------------------------------------------------------------------
-
-
-
-
-
 
