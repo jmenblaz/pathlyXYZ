@@ -18,6 +18,8 @@
 #' @param summary Logical. If TRUE, prints a summary table with mean, min, max CV
 #' and stable area percentage per layer.
 #' @param quiet Logical. If FALSE (default), shows progress bars and informative messages.
+#' #' @param cv_threshold Numeric. Threshold percentage to define the 'stable area'.
+#' Default is 20.
 #' @param ... Additional arguments.
 #'
 #' @details
@@ -54,6 +56,7 @@ cv_rstacks3d <- function(stack_list,
                        filename = NULL,
                        summary = TRUE,
                        quiet = FALSE,
+                       cv_threshold = 20,
                        # plot3d = FALSE, # In progress...
                        ...) {
 
@@ -167,7 +170,7 @@ cv_rstacks3d <- function(stack_list,
       mean_CV = as.vector(terra::global(cv_result, "mean", na.rm = TRUE)[,1]),
       min_CV = as.vector(terra::global(cv_result, "min", na.rm = TRUE)[,1]),
       max_CV  = as.vector(terra::global(cv_result, "max", na.rm = TRUE)[,1]),
-      stable_area = as.vector(terra::global(cv_result < 20, "mean", na.rm = TRUE)[,1]) * 100
+      stable_area = as.vector(terra::global(cv_result < cv_threshold, "mean", na.rm = TRUE)[,1]) * 100
     )
 
     cat("CV stack result summary ---\n\n")

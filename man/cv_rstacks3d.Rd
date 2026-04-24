@@ -11,6 +11,7 @@ cv_rstacks3d(
   filename = NULL,
   summary = TRUE,
   quiet = FALSE,
+  cv_threshold = 20,
   ...
 )
 }
@@ -26,7 +27,9 @@ Default is TRUE.}
 \item{summary}{Logical. If TRUE, prints a summary table with mean, min, max CV
 and stable area percentage per layer.}
 
-\item{quiet}{Logical. If FALSE (default), shows progress bars and informative messages.}
+\item{quiet}{Logical. If FALSE (default), shows progress bars and informative messages.
+#' @param cv_threshold Numeric. Threshold percentage to define the 'stable area'.
+Default is 20.}
 
 \item{...}{Additional arguments.}
 }
