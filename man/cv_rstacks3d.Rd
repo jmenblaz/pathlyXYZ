@@ -82,5 +82,4 @@ files <- list.files()
 stack_list <- lapply(files, terra::rast)
 
 }
-#' @export
 }
