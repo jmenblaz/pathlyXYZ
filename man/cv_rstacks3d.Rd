@@ -2,16 +2,8 @@
 % Please edit documentation in R/analysis_rstack3d.R
 \name{cv_rstacks3d}
 \alias{cv_rstacks3d}
-\title{\subsection{==============================================================================
-Module: Analysis of 3D Raster Stacks (rstack3d)
-Package: pathlyXYZ
-Author: @jmenblaz / J. Menéndez Blázquez}{
-
-Description:
-This script gathers analytical functions to process and extract statistical
-insights from 2.5/3D raster stacks. It focuses on voxel-wise temporal analysis,
-stability metrics, and vertical profile assessments.
-}}
+\title{cv_rstacks3d()
+Calculate 3D Coefficient of Variation (CV) across Multiple Raster Stacks}
 \usage{
 cv_rstacks3d(
   stack_list,
@@ -36,29 +28,19 @@ and stable area percentage per layer.}
 
 \item{quiet}{Logical. If FALSE (default), shows progress bars and informative messages.}
 
-\item{...}{Additional arguments (reserved for future 3D plotting integration).}
+\item{...}{Additional arguments.}
 }
 \description{
 This function computes the voxel-wise Coefficient of Variation (CV) across a list
 of 3D raster stacks (e.g., monthly cumulative impacts, distribution, enviromental
-variable, habitat suitability).
-It processes data layer by layer to optimize memory usage, making it suitable for high-resolution
+variable, habitat suitability).It processes data layer by layer to optimize memory usage, making it suitable for high-resolution
 2.5/3D environmental data.
 }
 \details{
-Index
-\itemize{
-\item cv_rstacks3d(): Calculates Coefficient of Variation and Stable Area Pct.
-==================================================================
-cv_rstacks3d() ------------------------------------------------------------
-Calculate 3D Coefficient of Variation (CV) across Multiple Raster Stacks
+The Coefficient of Variation is calculated as: \deqn{CV = (\sigma / \mu) * 100}.
+The 'Stable Area' metric represents the percentage of pixels with a CV < 20\%.
 }
-
-The Coefficient of Variation is calculated as: \eqn{CV = (\sigma / \mu) * 100}.
-The 'Stable Area' metric represents the percentage of pixels in a layer with
-a CV below 20\%, indicating high spatial(-temporal) persistence of the variable.
-
-#' @examples
+\examples{
 \dontrun{
 library(terra)
 library(pathlyXYZ)
@@ -68,11 +50,11 @@ s1 <- c(r, r*0.9, r*0.8) # Stack Month 1 (3 bins)
 s2 <- c(r*1.1, r, r*0.7) # Stack Month 2 (3 bins)
 s3 <- c(r*1.2, r*0.8, r*0.9) # Stack Month 3 (3 bins)
 
-names(s1) <- names(s2) <- names(s3) <- c("bin1", "bin2", "bin3")
+names(s1) <- names(s2) <- names(s3) <- c("layer_1", "layer_2", "layer_3")
 stack_list <- list(s1, s2, s3)
 
 # Calculate CV across the 3 stack (e.g., months)
-cv_3d <- pathlyXYZ::cv_rstacks(stack_list, summary = TRUE)
+cv_3d <- pathlyXYZ::cv_rstacks3d(stack_list, summary = TRUE)
 
 # Plot titled rstack using plot_rstack3d
 patlyXYZ::plot_rstack3d(cv_3d)

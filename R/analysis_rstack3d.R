@@ -1,29 +1,13 @@
 
-#' ==============================================================================
-#' Module: Analysis of 3D Raster Stacks (rstack3d)
-#' Package: pathlyXYZ
-#' Author: @jmenblaz / J. Menéndez Blázquez
-#' ------------------------------------------------------------------------------
-#' Description:
-#' This script gathers analytical functions to process and extract statistical
-#' insights from 2.5/3D raster stacks. It focuses on voxel-wise temporal analysis,
-#' stability metrics, and vertical profile assessments.
-#'
-#' Index
-#'   - cv_rstacks3d(): Calculates Coefficient of Variation and Stable Area Pct.
-#' ==================================================================
 
-
-
-#' cv_rstacks3d() ------------------------------------------------------------
+#' cv_rstacks3d()
 
 #' Calculate 3D Coefficient of Variation (CV) across Multiple Raster Stacks
 #'
 #' @description
 #' This function computes the voxel-wise Coefficient of Variation (CV) across a list
 #' of 3D raster stacks (e.g., monthly cumulative impacts, distribution, enviromental
-#' variable, habitat suitability).
-#' It processes data layer by layer to optimize memory usage, making it suitable for high-resolution
+#' variable, habitat suitability).It processes data layer by layer to optimize memory usage, making it suitable for high-resolution
 #' 2.5/3D environmental data.
 #'
 #' @param stack_list A list of SpatRaster objects or a character vector of file paths
@@ -34,14 +18,13 @@
 #' @param summary Logical. If TRUE, prints a summary table with mean, min, max CV
 #' and stable area percentage per layer.
 #' @param quiet Logical. If FALSE (default), shows progress bars and informative messages.
-#' @param ... Additional arguments (reserved for future 3D plotting integration).
+#' @param ... Additional arguments.
 #'
 #' @details
-#' The Coefficient of Variation is calculated as: \eqn{CV = (\sigma / \mu) * 100}.
-#' The 'Stable Area' metric represents the percentage of pixels in a layer with
-#' a CV below 20%, indicating high spatial(-temporal) persistence of the variable.
+#' The Coefficient of Variation is calculated as: \deqn{CV = (\sigma / \mu) * 100}.
+#' The 'Stable Area' metric represents the percentage of pixels with a CV < 20%.
 #'
-#' #' @examples
+#' @examples
 #' \dontrun{
 #' library(terra)
 #' library(pathlyXYZ)
@@ -51,11 +34,11 @@
 #' s2 <- c(r*1.1, r, r*0.7) # Stack Month 2 (3 bins)
 #' s3 <- c(r*1.2, r*0.8, r*0.9) # Stack Month 3 (3 bins)
 #'
-#' names(s1) <- names(s2) <- names(s3) <- c("bin1", "bin2", "bin3")
+#' names(s1) <- names(s2) <- names(s3) <- c("layer_1", "layer_2", "layer_3")
 #' stack_list <- list(s1, s2, s3)
 #'
 #' # Calculate CV across the 3 stack (e.g., months)
-#' cv_3d <- pathlyXYZ::cv_rstacks(stack_list, summary = TRUE)
+#' cv_3d <- pathlyXYZ::cv_rstacks3d(stack_list, summary = TRUE)
 #'
 #' # Plot titled rstack using plot_rstack3d
 #' patlyXYZ::plot_rstack3d(cv_3d)
@@ -174,7 +157,7 @@ cv_rstacks3d <- function(stack_list,
 
   # Merge the individual CV layers into a single SpatRaster
   cv_result <- terra::rast(cv_layers)
-  terra::names(cv_result) <- terra::names(ref_stack)
+  names(cv_result) <- names(ref_stack)
 
   # summary and export ---------------------------------------------------------
 
