@@ -253,10 +253,10 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
     terra::plot(rstack[[1]],
                 col = grDevices::colorRampPalette(c("grey97", "grey60", "grey20"))(100))
     # extent
-    graphics::plot(terra::ext(rstack),
-                   add = TRUE,
-                   border = col_ext,
-                   lwd = 10)
+    terra::plot(terra::as.polygons(terra::ext(rstack)),
+                add = TRUE,
+                border = col_ext,
+                lwd = 5)
 
     # Line
     graphics::plot(sf::st_geometry(tr), add = TRUE, col = "black", lwd = 5)
@@ -329,7 +329,10 @@ plot_hovmoller_rstack <- function(rstack, tr, z_values,
   vals$latitude <- coords[,2]
 
   # add distance between points
-  pts$dist_m <- as.numeric(sf::st_distance(pts, pts[1,]))
+  dists <- sf::st_distance(pts, pts[1, ])
+  pts$dist_m <- as.numeric(units::drop_units(dists))
+  # pts$dist_m <- as.numeric(sf::st_distance(pts, pts[1,]))
+
   vals$dist_m <- pts$dist_m  # <--- Fundamental
 
 
