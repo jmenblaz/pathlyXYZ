@@ -199,13 +199,13 @@ read_wcGPE <- function(file, info_meta = TRUE, tz = "UTC", quiet = FALSE) {
 
   for (col in date_cols) {
     if (col %in% names(df)) {
-      # Convertir cadenas vacías en NA
+      # empties cells as NA
       df[[col]][df[[col]] == ""] <- NA
-      # Parsear a POSIXct con el formato '26-Nov-2021 15:26:00'
+      # POSIXCct
       df[[col]] <- as.POSIXct(df[[col]], format = "%d-%b-%Y %H:%M:%S", tz = tz)
     }
     if (!quiet) {
-      cat(paste("· GPE mdoel position data model loaded: ", nrow(df), "rows y", ncol(df), "columns.\n"))
+      cat(paste("· GPE model position data model loaded: ", nrow(df), "rows y", ncol(df), "columns.\n"))
     }
     return(df)
   }
