@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_biologging.R
 \name{check_sequeira_names}
 \alias{check_sequeira_names}
-\title{2- @function preproc_fields_comp()}
+\title{2- check_sequeira_names()}
 \usage{
 check_sequeira_names(
   df,
@@ -28,7 +28,8 @@ List con:
 }
 \description{
 Check fields names against Sequeira et al., 2021 standard
-
+}
+\details{
 Identifies columns in a dataframe that are non-standard (extra)
 or missing compared to Sequeira et al., 2021 standardized fields
 }

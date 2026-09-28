@@ -2,10 +2,10 @@
 % Please edit documentation in R/utils_biologging.R
 \name{sequeira_names}
 \alias{sequeira_names}
-\title{1- @function sequeira_fields()
+\title{1- @function sequeira_names()
 2- @function preproc_fields_comp()
 3- @function read_wcGPE()
-1- @function sequeira_fields()}
+1 - sequeira_names()}
 \usage{
 sequeira_names()
 }
