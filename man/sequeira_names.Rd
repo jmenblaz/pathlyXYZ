@@ -4,6 +4,7 @@
 \alias{sequeira_names}
 \title{1- @function sequeira_fields()
 2- @function preproc_fields_comp()
+3- @function read_wcGPE()
 1- @function sequeira_fields()}
 \usage{
 sequeira_names()

@@ -39,22 +39,26 @@ If provided, \code{n_layers} is ignored.}
 \item{alpha}{Numeric transparency for the layers (0 = fully transparent, 1 = opaque). Default is 1.}
 
 \item{colramp}{Optional custom color ramp for plotting. Accepts:
-- A \strong{vector of colors} (e.g., \code{terrain.colors(100)}): This ramp will be
+\itemize{
+\item A \strong{vector of colors} (e.g., \code{terrain.colors(100)}): This ramp will be
 applied to all layers in the stack; or your own color ramp.
-- A \strong{list of color vectors} (e.g., \code{list(viridis(100), magma(100))}):
+\item A \strong{list of color vectors} (e.g., \code{list(viridis(100), magma(100))}):
 Allows assigning a different palette to each layer. This is ideal
 for visualizing heterogeneous variables (e.g., Temperature and Salinity)
 within the same 2.5D plot.
-- If \code{NULL} (default), the function falls back to the \code{cols} parameter
-or the standard 'viridis' palette.}
+\item If \code{NULL} (default), the function falls back to the \code{cols} parameter
+or the standard 'viridis' palette.
+}}
 
 \item{z_limits}{Controls how color scales are calculated across the stack:
-- \code{"auto"} (Default): Calculates a global min/max across all layers. Ideal for comparing
+\itemize{
+\item \code{"auto"} (Default): Calculates a global min/max across all layers. Ideal for comparing
 intensities (e.g., SDMs, UDs) across different depths/altitudes.
-- \code{c(min, max)}: A fixed numeric vector (e.g., \code{c(0, 1)}). Useful for probabilities or
+\item \code{c(min, max)}: A fixed numeric vector (e.g., \code{c(0, 1)}). Useful for probabilities or
 standardized indices (e.g., normalized variables, such us cumulative impacts; 0 - 1)
-- \code{NULL}: Each layer uses its own independent scale. Recommended when layers have
-different units (e.g., Temperature vs Salinity).}
+\item \code{NULL}: Each layer uses its own independent scale. Recommended when layers have
+different units (e.g., Temperature vs Salinity).
+}}
 
 \item{parallel}{Logical; if TRUE, layer pre-processing is done in parallel to improve speed on large stacks.}
 
