@@ -61,7 +61,7 @@ Installation instructions will be provided once the first functional
 release is available on GitHub. A stable version is planned for future
 submission to CRAN.
 
-## Example
+## Development Status
 
 `pathlyXYZ` **package is currently under active development**, and it
 has not yet a stable published version. Reproducible, end-to-end
@@ -75,11 +75,25 @@ include worked examples illustrating typical use cases, such as:
 
 - Simulation of fully 3D movement paths from observed tracking data
   (marine, aerial and terrestrial environment) by different modelling
-  methods \[e.g., Correlated Random Walks (CRW) or Step Selection
-  Functions (SSF)\]
+  methods \[e.g., Step Selection Functions (SSF)\]
 
 - Visualize and ploting shor-cuts and tools in order to facility the use
   of vertical dimension in the use of bio-logging data
+
+Key upcoming features and ongoing developments include:
+
+- **Standardized `pathly` Class**: Creation of a custom `pathly` object
+  class to standardize 3D tracking data structures and streamline
+  downstream analytical workflows.
+- **3D Movement Persistence Metrics**: Development of movement
+  persistence metrics specifically tailored for 3D trajectories
+  (applicable to both empirical observed tracks and simulated paths).
+- **3D Stack Overlap Analysis**: Analytical tools to quantify spatial
+  overlap and volume intersection across 3D `SpatRaster` stacks.
+- **3D Presence/Absence Plotting**: Dedicated functions to visualize and
+  plot 3D presence and absence data using multiple 3D spatial rendering
+  methods.
+- **Continuous Bug Fixes & API Refinements**
 
 ## Code of Conduct
 
@@ -110,7 +124,8 @@ repository:
 > Menéndez-Bláquez, J. (Year). *pathlyXYZ: An R package for simulating
 > and analyzing multidimensional movement trajectories* (development
 > version). GitHub - <a href="https://github.com/jmenblaz/pathlyXYZ"
-> class="uri">github.com/jmenblaz/pathlyXYZ</a>; DOI:
+> class="uri">github.com/jmenblaz/pathlyXYZ</a>; doi:
+> 10.5281/zenodo.18770516
 
 Once a stable release and/or peer-reviewed publication becomes
 available, users are encouraged to cite the corresponding
