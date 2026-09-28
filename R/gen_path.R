@@ -38,7 +38,7 @@
 #' @param angularErrorDist Function to generate angular errors
 #' @param linearErrorDist Function to generate linear errors
 #' @param fps Frames per second
-#' @param start Starting coordinates (x, y[, z])
+#' @param start Starting coordinates (x, y, z])
 #' @param z_bounds for z axy limits -> c(-Inf, Inf),
 #' @param central_place, for central place foraging paths (Logic TRUE/FALSE
 #' @param central_place_strength, if @central_place is TRUE, modify the attraction force

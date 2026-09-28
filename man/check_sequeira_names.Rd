@@ -20,6 +20,10 @@ check_sequeira_names(
 List with elements:
 \item{extra}{columns in df not in standard}
 \item{missing}{standard columns not in df}
+Check dataframe fields against Sequeira et al. standard
+
+Identifies which columns are standardized (Sequeira), which are extra,
+and si las obligatorias están presentes. Por defecto, el eje Z se asume \code{depthGLS}.
 
 List con:
 \item{standard}{columnas que coinciden con Sequeira}

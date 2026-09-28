@@ -3,19 +3,6 @@
 # trajectory geometries
 # -------------------------------------------------------------
 
-# Index ----
-# Helpers --
-
-# functions --
-#' @function length_path3d
-#'
-
-
-
-
-
-
-
 
 #--------------------------------------------------------------------
 # Helpers and internals functions
@@ -85,8 +72,8 @@
 
 
 # ----------------------------------------------------------
-#' @function length_path3d - cumulative length of a 3D trajectory object
-
+#' length_path3d() - cumulative length of a 3D trajectory object
+#'
 #' Length of a 3D path
 #'
 #' Computes the total length of a 3D trajectory or a portion of it.
@@ -118,7 +105,7 @@ length_path3d <- function(path3d, startIndex = 1, endIndex = nrow(path3d)) {
 
 
 #----------------------------------------------------------
-#' @function straight_distance_3d - linear distance of a 3D trajectory
+#' straight_distance_3d() - linear distance of a 3D trajectory
 #'
 #' Computes the straight-line distance between the first and last point
 #' of a 3D trajectory.
@@ -134,8 +121,6 @@ length_path3d <- function(path3d, startIndex = 1, endIndex = nrow(path3d)) {
 #' straight_distance_3d(path3d)
 #' # distance from point 1 to point 10
 #' straight_distance_3d(path3d, startIndex = 1, endIndex = 10)
-#'
-#'
 #' @export
 straight_dist_path3d <- function(path3d, startIndex = 1, endIndex = nrow(path3d)) {
 

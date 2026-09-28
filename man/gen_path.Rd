@@ -43,7 +43,7 @@ gen_path(
 
 \item{fps}{Frames per second}
 
-\item{start}{Starting coordinates (x, y\link{, z})}
+\item{start}{Starting coordinates (x, y, z])}
 
 \item{z_bounds}{for z axy limits -> c(-Inf, Inf),}
 

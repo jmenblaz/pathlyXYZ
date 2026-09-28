@@ -83,8 +83,6 @@ sequeira_names <- function() {
 #' @return List with elements:
 #'   \item{extra}{columns in df not in standard}
 #'   \item{missing}{standard columns not in df}
-#' @export
-
 
 #' Check dataframe fields against Sequeira et al. standard
 #'
