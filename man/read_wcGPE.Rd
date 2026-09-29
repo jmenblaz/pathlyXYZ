@@ -4,7 +4,14 @@
 \alias{read_wcGPE}
 \title{Read Wildlife Computers GPE model location files}
 \usage{
-read_wcGPE(file, info_meta = TRUE, tz = "UTC", quiet = FALSE)
+read_wcGPE(
+  file,
+  info_meta = TRUE,
+  tz = "UTC",
+  sequeira_rename = TRUE,
+  visual_info = FALSE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{file}{Character string specifying the file path to the GPE CSV file.}
@@ -12,6 +19,8 @@ read_wcGPE(file, info_meta = TRUE, tz = "UTC", quiet = FALSE)
 \item{info_meta}{Logical. If \code{TRUE} (default), prints the header metadata (PTT, tag model, status, reference datasets) to the console.}
 
 \item{tz}{Character string specifying the time zone for datetime parsing. Default is \code{"UTC"}.}
+
+\item{visual_info}{Logical. If \code{TRUE}, plot location and observatiion type maps}
 
 \item{quiet}{Logical. If \code{TRUE}, suppresses informational messages printed during loading. Default is \code{FALSE}.}
 }

@@ -139,7 +139,7 @@ check_sequeira_names <- function(df,
 #' @param info_meta Logical. If `TRUE` (default), prints the header metadata (PTT, tag model, status, reference datasets) to the console.
 #' @param tz Character string specifying the time zone for datetime parsing. Default is `"UTC"`.
 #' @param quiet Logical. If `TRUE`, suppresses informational messages printed during loading. Default is `FALSE`.
-#'
+#' @param visual_info Logical. If `TRUE`, plot location and observatiion type maps
 #' @return A `data.frame` containing the GPE position estimates with standardized column headers and formatted datetime fields.
 #'
 #' @details
@@ -156,7 +156,14 @@ check_sequeira_names <- function(df,
 #' gpe_data <- read_wcGPE("path/to/GPE_Locations.csv", info_meta = TRUE)
 #' head(gpe_data)
 #' }
-read_wcGPE <- function(file, info_meta = TRUE, tz = "UTC", quiet = FALSE) {
+read_wcGPE <- function(file, info_meta = TRUE, tz = "UTC",
+                       sequeira_rename = TRUE,
+                       visual_info = FALSE, quiet = FALSE) {
+
+  # 0 - local config
+  old_lc <- Sys.getlocale("LC_TIME")
+  Sys.setlocale("LC_TIME", "C")
+  on.exit(Sys.setlocale("LC_TIME", old_lc), add = TRUE)
 
   # 1 - Read .csv by lines
   all_lines <- readLines(file, warn = FALSE)  # read raw lines of the .csv
@@ -176,10 +183,7 @@ read_wcGPE <- function(file, info_meta = TRUE, tz = "UTC", quiet = FALSE) {
   # 3 - Select data - Omit lines 1:5 (at least for Wildlife Computer, GP3 Model)
   body_lines <- all_lines[6:length(all_lines)]
 
-  # 4 - remove initial comma(ej. ",220437...")
-  body_lines <- sub("^,", "", body_lines)
-
-  # 5 - Convert into df
+  # 4 - Convert into df
   df <- read.csv(
     text = body_lines,
     header = TRUE,
@@ -188,21 +192,94 @@ read_wcGPE <- function(file, info_meta = TRUE, tz = "UTC", quiet = FALSE) {
     stringsAsFactors = FALSE
   )
 
-  # 6. Format fields - POSIXct
+
+  # 5 - Format fields - POSIXct
   date_cols <- c("Date", "Sunrise", "Sunset")
 
   for (col in date_cols) {
     if (col %in% names(df)) {
-      # empties cells as NA
-      df[[col]][df[[col]] == ""] <- NA
-      # POSIXCct
-      df[[col]] <- as.POSIXct(df[[col]], format = "%d-%b-%Y %H:%M:%S", tz = tz)
+      # Limpiar espacios en blanco y convertir cadenas vacías a NA
+      val <- trimws(df[[col]])
+      val[val == ""] <- NA
+
+      # Convertir a POSIXct
+      df[[col]] <- as.POSIXct(val, format = "%d-%b-%Y %H:%M:%S", tz = tz)
     }
-    if (!quiet) {
-      cat(paste("· GPE model position data model loaded: ", nrow(df), "rows y", ncol(df), "columns.\n"))
-    }
-    return(df)
   }
+
+  if (!quiet) {
+    cat(paste0("· GPE position data loaded: ", nrow(df), " rows and ", ncol(df), " columns.\n"))
+  }
+
+  # 6 - Renames fields based on Sequeria et al., 2021
+  if (sequeira_rename) {
+    rename_map <- c(
+      "Ptt"                   = "ptt",
+      "Date"                  = "time",
+      "Most.Likely.Latitude"  = "latitude",
+      "Most.Likely.Longitude" = "longitude"
+    )
+    for (old_col in names(rename_map)) {
+      if (old_col %in% names(df)) {
+        names(df)[names(df) == old_col] <- rename_map[old_col]
+      }
+    }
+
+    df$organismID <- NA
+
+    if (!quiet) {
+      cat(" · Renamed fields to Sequeira et al. standard (organismID, time, latitude, longitude).\n")
+    }
+  }
+
+  # Summary plot of GPE positions
+  if (visual_info) {
+
+    # World map (WGS84)
+    world <- rnaturalearth::ne_countries(scale = "medium", returnclass = "sf")
+
+    # Map exten +- 1 degree
+    xlim <- range(df[["longitude"]], na.rm = TRUE) + c(-2, 2)
+    ylim <- range(df[["latitude"]], na.rm = TRUE) + c(-2, 2)
+
+    # Mapa theme
+    clean_theme <- ggplot2::theme_bw() +
+      ggplot2::theme(
+        panel.grid      = ggplot2::element_blank(),
+        axis.title      = ggplot2::element_blank(),
+        axis.text       = ggplot2::element_text(size = 10),
+        legend.position = "right",
+        plot.margin     = ggplot2::margin(4, 4, 4, 4)
+      )
+
+    # Plot 1: Progresión temporal (viridis)
+    p1 <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data = world, fill = "grey80", color = NA) +
+      ggplot2::geom_path(data = df, ggplot2::aes(x = .data[["longitude"]], y = .data[["latitude"]]), color = "grey60", linewidth = 0.3) +
+      ggplot2::geom_point(data = df, ggplot2::aes(x = .data[["longitude"]], y = .data[["latitude"]], color = .data[["time"]]), size = 1.2) +
+      ggplot2::scale_color_viridis_c() +
+      ggplot2::coord_sf(xlim = xlim, ylim = ylim, expand = FALSE) +
+      clean_theme
+
+    p1
+
+    # Plot 2: Tipo de observación
+    p2 <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data = world, fill = "grey80", color = NA) +
+      ggplot2::geom_point(data = df, ggplot2::aes(x = .data[["longitude"]], y = .data[["latitude"]], color = Observation.Type), size = 1.2) +
+      ggplot2::coord_sf(xlim = xlim, ylim = ylim, expand = FALSE) +
+      clean_theme
+
+    #  print plots
+    if (requireNamespace("patchwork", quietly = TRUE)) {
+      print(patchwork::wrap_plots(p1, p2, ncol = 2))
+    } else {
+      print(p1)
+      print(p2)
+    }
+  }
+
+  return(df)
 }
 
 
